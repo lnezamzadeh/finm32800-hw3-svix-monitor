@@ -62,9 +62,24 @@ def svix_squared(cdf):
     0.0401
     """
     ## TODO: Implement this function as specified in the docstring above.
-    raise NotImplementedError(
-        "Implement svix_squared (see HOMEWORK INSTRUCTIONS at the top of this file)"
+    # Separate strikes below and above the forward
+    # Use puts below the forward and calls above it
+    option_prices = np.where(
+        cdf.grid <= cdf.forward,
+        cdf.put_grid,
+        cdf.call_grid
     )
+
+    # Calculate the total area under option prices
+    option_area = np.trapezoid(option_prices, cdf.grid)
+
+    # Calculate SVIX squared
+    tau = cdf.maturity_years
+    rf = cdf.forward
+
+    svix2 = (2 / (tau * rf)) * option_area
+
+    return float(svix2)
 
 
 def interpolate_variance(svix2_near, tau_near, svix2_far, tau_far, horizon_years=HORIZON_DAYS / 365.0):

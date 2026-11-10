@@ -79,9 +79,17 @@ def crash_probability(cdf, alpha):
     True
     """
     ## TODO: Implement this function as specified in the docstring above.
-    raise NotImplementedError(
-        "Implement crash_probability (see HOMEWORK INSTRUCTIONS at the top of this file)"
-    )
+    # Get the risk-neutral probability of a crash
+    q = cdf(alpha)
+
+    # Get the risk-free growth factor and put price
+    rf = cdf.forward
+    put_price = cdf.put(alpha)
+
+    # Calculate the log investor's crash probability
+    crash_prob = (alpha * q / rf) - put_price
+
+    return float(crash_prob)
 
 
 def crash_probability_power(cdf, alpha, gamma=GAMMA):
